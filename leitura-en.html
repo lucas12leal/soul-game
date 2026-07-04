@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#0B0F1A">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soul GPS Reading, The Soul Game</title>
+<meta name="description" content="In 90 minutes, see on a map exactly where your energy is stuck, and leave with the single smallest move that reorganizes everything else.">
+<!-- REPLACE BEFORE PUBLISHING: https://buy.stripe.com/dRmeVfgvgeyXfl3gZ21oI01, [FOTO_LUCAS], [IMG_RADAR] -->
+<style>
+  :root{
+    --bg:#0B0F1A; --bg2:#111827; --card:#151C2C; --border:#232B3E;
+    --text:#E5E7EB; --muted:#9CA3AF;
+    --violet:#8B5CF6; --violet2:#A855F7; --gold:#EAB308; --green:#22C55E; --red:#EF4444;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.7}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  section{padding:56px 0}
+  h1{font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1.25;margin:18px 0}
+  h2{font-size:clamp(1.3rem,3vw,1.7rem);margin-bottom:18px;color:#fff}
+  p{margin-bottom:16px;color:var(--text)}
+  .muted{color:var(--muted)}
+  .pre{color:var(--violet2);text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;font-weight:600}
+  .sub{font-size:1.1rem;color:var(--muted)}
+  .cta{display:inline-block;background:linear-gradient(135deg,var(--violet),var(--violet2));color:#fff;
+       padding:16px 34px;border-radius:12px;font-weight:700;font-size:1.05rem;text-decoration:none;
+       box-shadow:0 8px 30px rgba(139,92,246,0.35);transition:transform .15s}
+  .cta:hover{transform:translateY(-2px)}
+  .cta-note{display:block;margin-top:10px;font-size:.85rem;color:var(--muted)}
+  .hero{padding:80px 0 64px;text-align:center;background:
+        radial-gradient(ellipse at 50% -20%,rgba(139,92,246,0.25),transparent 60%),var(--bg)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:18px}
+  .card h3{color:var(--violet2);margin-bottom:8px;font-size:1.1rem}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
+       background:rgba(139,92,246,0.18);color:var(--violet2);font-weight:700;margin-right:10px;flex-shrink:0}
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+  ul.list{list-style:none;margin:0 0 16px}
+  ul.list li{padding-left:28px;position:relative;margin-bottom:10px}
+  ul.list li.yes::before{content:"✦";color:var(--green);position:absolute;left:4px}
+  ul.list li.no::before{content:"✕";color:var(--red);position:absolute;left:6px}
+  .price-box{background:linear-gradient(160deg,var(--card),#1A1330);border:1px solid var(--violet);
+             border-radius:18px;padding:36px;text-align:center}
+  .price-old{text-decoration:line-through;color:var(--muted);font-size:1.2rem}
+  .price-new{font-size:2.6rem;font-weight:800;color:#fff;margin:6px 0}
+  .guarantee{border-left:3px solid var(--gold);padding:18px 22px;background:rgba(234,179,8,0.06);border-radius:0 12px 12px 0;margin-top:26px}
+  details{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:12px}
+  summary{cursor:pointer;font-weight:600;color:#fff}
+  details p{margin-top:12px;color:var(--muted)}
+  .center{text-align:center}
+  .img-ph{background:var(--bg2);border:1px dashed var(--border);border-radius:14px;padding:60px 20px;
+          text-align:center;color:var(--muted);margin:20px 0}
+  footer{padding:36px 0;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.85rem}
+  @media(max-width:600px){section{padding:40px 0}.hero{padding:56px 0 44px}}
+
+  /* mobile/UX upgrade */
+  html{scroll-behavior:smooth}
+  .cta:active{transform:scale(.98)}
+  a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--violet2);outline-offset:2px}
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:99;display:none;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(11,15,26,0.94);backdrop-filter:blur(8px);border-top:1px solid var(--border)}
+  .sticky-cta a{display:block;text-align:center;background:linear-gradient(135deg,var(--violet),var(--violet2));color:#fff;padding:15px;border-radius:12px;font-weight:700;text-decoration:none;font-size:1rem}
+  @media(max-width:600px){
+    .sticky-cta{display:block}
+    body{padding-bottom:80px}
+    .hero .cta,.price-box .cta,.center .cta{display:block;text-align:center}
+    .card{padding:20px 16px}
+    .price-box{padding:28px 18px}
+    .img-ph{padding:40px 14px}
+    h1{font-size:1.5rem}
+    .sub{font-size:1rem}
+    details{padding:16px 16px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <span class="pre">For people who read the books and did the therapies, and the pattern still comes back</span>
+    <h1>In 90 minutes, you will <em>see on a map</em> exactly where your energy is stuck, and leave with the single smallest move that reorganizes everything else.</h1>
+    <p class="sub">Not therapy, not tarot, and nobody here hands you advice. A geometric diagnostic of your 7 centers, where the one who recognizes the answer is you.</p>
+    <a class="cta" href="https://buy.stripe.com/dRmeVfgvgeyXfl3gZ21oI01">Book my Reading, €150</a>
+    <span class="cta-note">Regular price €250 · launch condition · 20 spots</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section>
+  <div class="wrap">
+    <h2>You don't need more content. You need an address.</h2>
+    <p>If you're here, you've probably tried a bit of everything: the manifestation books, therapy, breathwork, a retreat or two. And you've had <strong>that breakthrough insight</strong> that felt like it would change everything, and three weeks later the pattern was back.</p>
+    <p>The problem isn't lack of effort. It isn't lack of knowledge.</p>
+    <p><strong>The problem is trying to fix something without knowing its address.</strong> Your career stagnation, for example, might be <span style="color:var(--violet2)">throat</span> (you don't say what you want), <span style="color:var(--gold)">solar plexus</span> (you can't sustain the conflict that change requires) or <span style="color:var(--green)">sacral</span> (you haven't given yourself permission to prosper). Three different problems. Three different solutions.</p>
+    <p class="muted">And most people spend years working on the wrong center.</p>
+  </div>
+</section>
+
+<!-- MECHANISM -->
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <h2>What happens in a Soul GPS Reading</h2>
+    <div class="card">
+      <h3>1 · You get MAPS, not a verdict</h3>
+      <p class="muted">I won't tell you "your problem is X". I'll show you 2-3 possible readings of your situation, through different doors, and ask: <em>which one lands in your body?</em> The right one arrives with a physical recognition. We call it resonance. The final authority in this session isn't me, and it isn't the AI. It's you.</p>
+    </div>
+    <div class="card">
+      <h3>2 · You SEE your radar</h3>
+      <p class="muted">On screen, we generate the chart of your 7 centers together: the <span style="color:var(--gold)">golden line</span> (what your current situation asks of you) over the <span style="color:var(--green)">green area</span> (what you've been bringing). The gap between them is your stuck point: visible and nameable. No more "something feels off". You'll point at the spot.</p>
+      <div style="text-align:center;margin:20px 0">
+<svg viewBox="0 0 420 400" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%;height:auto" role="img" aria-label="Illustrative example. In session, the radar is generated with YOUR data: golden line = what the situation asks; green area = what you have been bringing.">
+<rect width="420" height="400" fill="none"/>
+<polygon points="210.0,157.5 235.4,169.7 241.7,197.2 224.1,219.3 195.9,219.3 178.3,197.2 184.6,169.7" fill="none" stroke="#232B3E" stroke-width="1"/><polygon points="210.0,125.0 260.8,149.5 273.4,204.5 238.2,248.6 181.8,248.6 146.6,204.5 159.2,149.5" fill="none" stroke="#232B3E" stroke-width="1"/><polygon points="210.0,92.5 286.2,129.2 305.1,211.7 252.3,277.8 167.7,277.8 114.9,211.7 133.8,129.2" fill="none" stroke="#232B3E" stroke-width="1"/><polygon points="210.0,60.0 311.6,108.9 336.7,218.9 266.4,307.1 153.6,307.1 83.3,218.9 108.4,108.9" fill="none" stroke="#232B3E" stroke-width="1"/><line x1="210" y1="190" x2="210.0" y2="60.0" stroke="#232B3E" stroke-width="1"/><line x1="210" y1="190" x2="311.6" y2="108.9" stroke="#232B3E" stroke-width="1"/><line x1="210" y1="190" x2="336.7" y2="218.9" stroke="#232B3E" stroke-width="1"/><line x1="210" y1="190" x2="266.4" y2="307.1" stroke="#232B3E" stroke-width="1"/><line x1="210" y1="190" x2="153.6" y2="307.1" stroke="#232B3E" stroke-width="1"/><line x1="210" y1="190" x2="83.3" y2="218.9" stroke="#232B3E" stroke-width="1"/><line x1="210" y1="190" x2="108.4" y2="108.9" stroke="#232B3E" stroke-width="1"/>
+<polygon points="210.0,138.0 281.1,133.3 273.4,204.5 255.1,283.7 193.1,225.1 134.0,207.4 159.2,149.5" fill="rgba(34,197,94,0.22)" stroke="#22C55E" stroke-width="2"/>
+<polygon points="210.0,86.0 271.0,141.4 298.7,210.2 238.2,248.6 164.9,283.7 134.0,207.4 138.9,133.3" fill="none" stroke="#EAB308" stroke-width="2.5" stroke-dasharray="none"/>
+<circle cx="210.0" cy="86.0" r="3.5" fill="#EAB308"/><circle cx="271.0" cy="141.4" r="3.5" fill="#EAB308"/><circle cx="298.7" cy="210.2" r="3.5" fill="#EAB308"/><circle cx="238.2" cy="248.6" r="3.5" fill="#EAB308"/><circle cx="164.9" cy="283.7" r="3.5" fill="#EAB308"/><circle cx="134.0" cy="207.4" r="3.5" fill="#EAB308"/><circle cx="138.9" cy="133.3" r="3.5" fill="#EAB308"/><text x="210.0" y="31.4" fill="#9CA3AF" font-size="13" text-anchor="middle" dominant-baseline="middle">Meaning</text><text x="334.0" y="91.1" fill="#9CA3AF" font-size="13" text-anchor="start" dominant-baseline="middle">Safety</text><text x="364.6" y="225.3" fill="#9CA3AF" font-size="13" text-anchor="start" dominant-baseline="middle">Pleasure</text><text x="278.8" y="332.9" fill="#9CA3AF" font-size="13" text-anchor="start" dominant-baseline="middle">Will</text><text x="141.2" y="332.9" fill="#9CA3AF" font-size="13" text-anchor="end" dominant-baseline="middle">Heart</text><text x="55.4" y="225.3" fill="#9CA3AF" font-size="13" text-anchor="end" dominant-baseline="middle">Expression</text><text x="86.0" y="91.1" fill="#9CA3AF" font-size="13" text-anchor="end" dominant-baseline="middle">Vision</text>
+</svg>
+<p style="color:#9CA3AF;font-size:.82rem;margin-top:6px">Illustrative example. In session, the radar is generated with YOUR data: golden line = what the situation asks; green area = what you have been bringing.</p>
+</div>
+    </div>
+    <div class="card">
+      <h3>3 · You leave with ONE move, not twelve</h3>
+      <p class="muted">Every system has a keystone vertex: the smallest move that reorganizes the rest. It comes translated into YOUR language: if your world is training, it becomes training; if it's business, it becomes business. A 7-day practice, concrete and verifiable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="step"><span class="num">1</span><p>You book and pay: online, live, 90 minutes.</p></div>
+    <div class="step"><span class="num">2</span><p>48h before, you get a 10-minute questionnaire that feeds the preparation of your reading. You won't spend half the session "explaining yourself".</p></div>
+    <div class="step"><span class="num">3</span><p>The session: your situation, the possible maps, your choice by resonance, the radar, your keystone vertex, your 7-day practice.</p></div>
+    <div class="step"><span class="num">4</span><p>Within 24h, you receive your <strong>Reading Map</strong> as a PDF, so nothing depends on memory.</p></div>
+    <div class="step"><span class="num">5</span><p>On day 7, I check in on the move. You don't leave the session into a void.</p></div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <h2>This is for you if...</h2>
+    <ul class="list">
+      <li class="yes">You already have self-development vocabulary, but feel the map connecting the pieces is missing;</li>
+      <li class="yes">You want a structured diagnostic, not another pleasant conversation;</li>
+      <li class="yes">You'd rather <strong>see</strong> things clearly than receive ready-made answers;</li>
+      <li class="yes">You're in transition (career, relationship, country, identity) and need to know which move comes first.</li>
+    </ul>
+    <h2 style="margin-top:34px">And NOT for you if...</h2>
+    <ul class="list">
+      <li class="no">You're seeking mental health treatment. The Reading is a self-knowledge practice and <strong>does not replace medical or psychological care</strong>;</li>
+      <li class="no">You want someone to decide for you. This method does the opposite;</li>
+      <li class="no">You want a magic-result promise. I promise clarity and one move. The move is yours to make.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- WHO GUIDES -->
+<section>
+  <div class="wrap">
+    <h2>Who guides it</h2>
+    <div class="img-ph" style="max-width:180px;border-radius:50%">[FOTO_LUCAS]</div>
+    <p>I'm <strong>Lucas Leal</strong>. I work in tech and AI, and I was the first person ever mapped by The Soul Game, before becoming the method's first facilitator. The Soul Game was developed by <strong>Rafael Pirondi</strong> and consolidated into a knowledge base of 50+ structured concepts. Every reading is assisted by that base through an AI tool built on the method: the precision of a system with the presence of a real human conversation.</p>
+    <!-- TESTIMONIALS: insert beta reading videos/screenshots here -->
+  </div>
+</section>
+
+<!-- PRICE -->
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="price-box">
+      <p class="pre">Soul GPS Reading · 90 minutes · live · online</p>
+      <p class="price-old">€250</p>
+      <p class="price-new">€150</p>
+      <p class="muted">Launch: first 20 spots<br>Personalized preparation + 90-min session + Reading Map PDF + day-7 follow-up</p>
+      <a class="cta" href="https://buy.stripe.com/dRmeVfgvgeyXfl3gZ21oI01" style="margin-top:16px">Book my Reading</a>
+    </div>
+    <div class="guarantee">
+      <strong style="color:var(--gold)">A guarantee with no fine print:</strong> if by the end of the session you don't have clarity on where your stuck point is, tell me, and I'll refund 100% on the spot. The session only counts if you leave seeing.
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="wrap">
+    <h2>FAQ</h2>
+    <details><summary>Do I need to believe in chakras / energy?</summary><p>No. The 7 centers work as a map of 7 dimensions of human experience (safety, pleasure, will, bonding, expression, vision, meaning). If you prefer to treat it as a psychological model, the reading works exactly the same. The map doesn't ask for faith. It asks for honesty.</p></details>
+    <details><summary>Is this therapy?</summary><p>No. It's diagnosis and navigation. Many people do the Reading alongside therapy, and bring the map to their therapist. If something shows up that calls for clinical care, I'll tell you so, with respect and clarity.</p></details>
+    <details><summary>Is it religious?</summary><p>No. The method has no doctrine, requires no religious practice, and doesn't conflict with your faith (or the absence of one).</p></details>
+    <details><summary>What if no map resonates?</summary><p>Then we open others. Your situation has more doors than the first three. And if there's still no recognition, the guarantee applies: your money back.</p></details>
+    <details><summary>Why is there AI in the process?</summary><p>The AI organizes the possible maps from the method's knowledge base. It decides nothing about you. In The Soul Game this is a constitutional rule: the tool offers hypotheses, your resonance chooses, your experience validates. It's the opposite of the digital oracle.</p></details>
+    <details><summary>Does it work online?</summary><p>The Reading was designed online: you need to see the screen (the maps and radar are visual). Zoom or Meet, recording available if you want it.</p></details>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="center" style="background:radial-gradient(ellipse at 50% 120%,rgba(139,92,246,0.25),transparent 60%),var(--bg2)">
+  <div class="wrap">
+    <h2>The pattern that brought you here won't be solved by one more insight.<br>It will be solved by an address and a move.</h2>
+    <a class="cta" href="https://buy.stripe.com/dRmeVfgvgeyXfl3gZ21oI01">Book my Reading, €150</a>
+    <span class="cta-note">20 launch spots</span>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">The Soul Game · Self-knowledge and personal transformation · Not a substitute for professional health care</div>
+</footer>
+
+<div class="sticky-cta"><a href="https://buy.stripe.com/dRmeVfgvgeyXfl3gZ21oI01">Book my Reading, €150</a></div>
+</body>
+</html>

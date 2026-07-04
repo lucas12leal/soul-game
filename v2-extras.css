@@ -1,0 +1,483 @@
+/* ============================================
+   V2 — Additional Styles
+   Extends ../styles.css with sections from old homepage
+   ============================================ */
+
+/* ----- Intro Section ----- */
+.intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.intro-text .lead {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    font-style: italic;
+    font-family: var(--font-display);
+    font-weight: 400;
+}
+
+.intro-text p {
+    color: var(--text-secondary);
+    margin-bottom: 0.8rem;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.intro-text strong {
+    color: var(--gold);
+    font-weight: 600;
+}
+
+.intro-text em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 600;
+}
+
+.intro-card {
+    background: var(--bg-card);
+    border: 1px solid var(--surface-light);
+    border-radius: var(--radius-lg);
+    padding: 2.2rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.intro-card-icon {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.intro-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+}
+
+.intro-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+}
+
+.intro-card-emotions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.emotion-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.emotion-label {
+    width: 100%;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.emotion-group.positive .emotion-label { color: #2ecc71; }
+.emotion-group.negative .emotion-label { color: #e74c3c; }
+
+.emotion-group span:not(.emotion-label) {
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.emotion-group.positive span:not(.emotion-label) {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.emotion-group.negative span:not(.emotion-label) {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+/* ----- Frequency Cards ----- */
+.frequencias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1.2rem;
+}
+
+.freq-card {
+    background: var(--bg-card);
+    border: 1px solid var(--surface-light);
+    border-radius: var(--radius-lg);
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.freq-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-color);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.freq-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(139, 92, 246, 0.2);
+    box-shadow: var(--shadow-md);
+}
+
+.freq-card:hover::before { opacity: 1; }
+
+.freq-number {
+    position: absolute;
+    top: 0.8rem;
+    right: 1rem;
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    opacity: 0.1;
+    line-height: 1;
+}
+
+.freq-icon {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.freq-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.freq-theme {
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.6rem;
+}
+
+.freq-desc {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.freq-max {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 0.8rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    border-left: 2px solid var(--accent-color);
+}
+
+.freq-max-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+}
+
+/* ----- Tables ----- */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--surface-light);
+    background: var(--bg-card);
+    margin-top: 2rem;
+}
+
+.jogo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.jogo-table thead {
+    background: rgba(139, 92, 246, 0.06);
+}
+
+.jogo-table th {
+    padding: 1rem 1.2rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--surface-light);
+}
+
+.jogo-table td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.6;
+}
+
+.jogo-table tbody tr:last-child td { border-bottom: none; }
+.jogo-table tbody tr:hover { background: rgba(139, 92, 246, 0.03); }
+
+.col-positive { color: #6bcb8b !important; }
+.col-negative { color: #e88a8a !important; }
+
+.freq-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ----- Evolution Stats ----- */
+.evolucao-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--surface-light);
+    border-radius: var(--radius-md);
+    padding: 1.3rem 1.8rem;
+    text-align: center;
+    min-width: 170px;
+}
+
+.stat-card.highlight {
+    border-color: rgba(46, 204, 113, 0.3);
+    background: rgba(46, 204, 113, 0.04);
+}
+
+.stat-card .stat-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+}
+
+.stat-card .stat-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.stat-card.highlight .stat-value { color: #2ecc71; }
+.stat-arrow { font-size: 1.3rem; color: var(--text-muted); }
+
+/* ----- Version Comparison ----- */
+.versoes-comparison {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.versao-card {
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    border: 1px solid var(--surface-light);
+}
+
+.versao-card.v1 {
+    background: rgba(231, 76, 60, 0.04);
+    border-color: rgba(231, 76, 60, 0.15);
+}
+
+.versao-card.v2 {
+    background: rgba(46, 204, 113, 0.04);
+    border-color: rgba(46, 204, 113, 0.15);
+}
+
+.versao-header {
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.versao-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.versao-tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.7rem;
+    border-radius: 100px;
+    font-weight: 600;
+}
+
+.v1 .versao-tag { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+.v2 .versao-tag { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+
+.versao-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0;
+    margin: 0;
+}
+
+.versao-card li {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    padding-left: 1.4rem;
+    position: relative;
+}
+
+.v1 li::before { content: '×'; position: absolute; left: 0; color: #e74c3c; font-weight: 700; }
+.v2 li::before { content: '✓'; position: absolute; left: 0; color: #2ecc71; font-weight: 700; }
+
+.versao-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+}
+
+.versao-divider span {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.divider-arrow {
+    font-size: 1.3rem;
+    color: var(--gold);
+}
+
+/* Sub-header for civilization section */
+.subsection-header {
+    text-align: center;
+    margin: 4rem 0 1.5rem;
+}
+
+.subsection-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.subsection-header p {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ----- Desafios / Pillars ----- */
+.desafios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.desafio-card {
+    background: var(--bg-card);
+    border: 1px solid var(--surface-light);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.desafio-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(245, 158, 11, 0.3);
+    box-shadow: var(--shadow-md);
+}
+
+.desafio-num {
+    font-family: var(--font-display);
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.15;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+}
+
+.desafio-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+}
+
+.desafio-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 768px) {
+    .intro-grid { grid-template-columns: 1fr; }
+    .frequencias-grid { grid-template-columns: 1fr; }
+    .versoes-comparison { grid-template-columns: 1fr; }
+    .versao-divider { flex-direction: row; }
+    .versao-divider span { writing-mode: horizontal-tb; }
+    .desafios-grid { grid-template-columns: 1fr; }
+    .evolucao-stats { flex-direction: column; }
+    .stat-arrow { transform: rotate(90deg); }
+    .jogo-table th, .jogo-table td { padding: 0.7rem 0.9rem; font-size: 0.82rem; }
+}

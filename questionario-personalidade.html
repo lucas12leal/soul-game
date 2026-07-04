@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Profile — Questionnaire | Soul Game</title>
+    <meta name="description" content="Discover which of the 7 personalities best matches you. Questionnaire based on the archetypes of the 7 chakras.">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="questionario-personalidade.css">
+    <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <nav class="navbar scrolled"><div class="nav-container">
+        <a href="index.html" class="nav-logo"><span class="logo-icon">&#10022;</span><span>Soul Game</span></a>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="index.html#chakras">7 Chakras</a>
+            <a href="index.html#personalidades">7 Personalities</a>
+            <a href="questionario.html">Chakra Questionnaire</a>
+        </div>
+        <a href="index.html#cta" class="nav-cta">Start Now</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div></nav>
+
+    <div style="height: 72px"></div>
+
+    <div id="pqApp" class="pq-wrapper"></div>
+
+    <footer class="footer"><div class="container"><div class="footer-content">
+        <div class="footer-brand"><span class="logo-icon">&#10022;</span><span>Soul Game</span></div>
+        <p class="footer-text">Self-knowledge and personal transformation based on 7 chakras.<br>Does not replace professional guidance.</p>
+        <p class="footer-copy">&copy; 2026 Soul Game. All rights reserved.</p>
+    </div></div></footer>
+
+<script>
+(function(){
+
+const ARCHETYPES = [
+  { id:'tradicional', name:'Traditional / Family-Oriented', chakra:'Root', color:'#EF4444' },
+  { id:'criativa',    name:'Creative / Social',             chakra:'Sacral', color:'#F97316' },
+  { id:'ambiciosa',   name:'Ambitious / Confident',         chakra:'Solar Plexus', color:'#EAB308' },
+  { id:'empatica',    name:'Empathetic / Friendly',         chakra:'Heart', color:'#22C55E' },
+  { id:'intelectual', name:'Intellectual / Curious',        chakra:'Third Eye', color:'#8B5CF6' },
+  { id:'expressiva',  name:'Expressive / Communicative',    chakra:'Throat', color:'#3B82F6' },
+  { id:'espiritualista', name:'Spiritual / Intuitive',      chakra:'Crown', color:'#A855F7' }
+];
+
+const QUESTIONS = [
+  {
+    title:'What do you look for most in a friendship?',
+    options:[
+      { archId:'tradicional',    text:'People who have always been by my side, who think like me and share the same lifestyle.' },
+      { archId:'criativa',       text:'Fun, sociable, lighthearted people with a good sense of humor.' },
+      { archId:'ambiciosa',      text:'People who have prominence, power, success, influence, and ambition.' },
+      { archId:'empatica',       text:'People I can help or support, whether intellectually, materially, emotionally, or physically.' },
+      { archId:'intelectual',    text:'People I can have deep conversations with or learn from.' },
+      { archId:'expressiva',     text:'People I can influence or impact, who admire me, give me attention, or recognize me.' },
+      { archId:'espiritualista', text:'People who are spiritual and intuitive, who do not care as much about material things.' }
+    ]
+  },
+  {
+    title:'What would you most like to do in your free time?',
+    options:[
+      { archId:'tradicional',    text:'Do activities that relax me or that I already master and am familiar with.' },
+      { archId:'criativa',       text:'Do different things and have fun, such as attending events, parties, listening to music, being with friends, playing sports, enjoying art, cooking, dancing, and more.' },
+      { archId:'ambiciosa',      text:'Be doing something that brings me prominence, money, challenges, capabilities, or that is related to my ambition.' },
+      { archId:'empatica',       text:'Be helping, contributing, or supporting people or animals, whether intellectually, materially, physically, or emotionally.' },
+      { archId:'intelectual',    text:'Be learning new subjects or deepening my knowledge in some area.' },
+      { archId:'expressiva',     text:'Be communicating, influencing, or receiving attention from people.' },
+      { archId:'espiritualista', text:'Be practicing something spiritual, seeking spiritual experiences or missions, or integrating different areas of life.' }
+    ]
+  },
+  {
+    title:'Which job option would best suit you?',
+    options:[
+      { archId:'tradicional',    text:'Having a profession or vocation where I can perform well and have stability, without drastic changes or heavy pressure.' },
+      { archId:'criativa',       text:'Having a profession or vocation that is fun and involves people, socializing, or activities such as art, sports, dance, cooking, painting, and more.' },
+      { archId:'ambiciosa',      text:'Having a profession or vocation that matches my ambition, bringing success, money, influence, impact, and growth.' },
+      { archId:'empatica',       text:'Having a profession or vocation where I can help or contribute to people, whether intellectually, physically, or materially.' },
+      { archId:'intelectual',    text:'Having a profession or vocation where I can explore my intelligence, be in constant learning and deepening, create new solutions, or improve existing ones.' },
+      { archId:'expressiva',     text:'Having a profession or vocation where I can influence or receive attention from people, whether digitally or in person, using my body, voice, or intellect.' },
+      { archId:'espiritualista', text:'Having a profession or vocation where I fulfill my spiritual mission or contribute to people\'s spirituality.' }
+    ]
+  },
+  {
+    title:'Which stereotype best describes you?',
+    options:[
+      { archId:'tradicional',    text:'I am someone who likes to go with the flow of life, have a good job, enjoy the moment, and appreciate family, friends, and children.' },
+      { archId:'criativa',       text:'I am someone who wants to experience life, have fun, do different things, and I am emotional and sensitive.' },
+      { archId:'ambiciosa',      text:'I am very ambitious; I need to stand out in what I do, I like to compete, and I want to be among the best.' },
+      { archId:'empatica',       text:'I am an empathetic person; I like to help people or animals and I find it hard to say \'no\' or not connect with others\' emotions and problems.' },
+      { archId:'intelectual',    text:'I am very curious; I am always questioning things and seeking to learn more. I have an analytical profile.' },
+      { archId:'expressiva',     text:'I am a communicative person; I like to express my ideas and be heard and noticed by others. I am always looking to communicate or get attention and influence from people.' },
+      { archId:'espiritualista', text:'I am an intuitive or spiritual person; I try to see things in a more holistic way, not just materially.' }
+    ]
+  },
+  {
+    title:'If you had a sum of money to live without working and use however you wanted, how would you use it?',
+    options:[
+      { archId:'tradicional',    text:'I would use that money prudently and keep it saved.' },
+      { archId:'criativa',       text:'I would use that money to enjoy life, investing in fun, travel, socializing, art, culture, and gastronomy.' },
+      { archId:'ambiciosa',      text:'I would use that money so it could generate more money directly or indirectly, or to buy something materially significant.' },
+      { archId:'empatica',       text:'I would use that money both for my own benefit and to help other people.' },
+      { archId:'intelectual',    text:'I would use that money to expand my knowledge, investing in courses, books, tools, and experiments.' },
+      { archId:'expressiva',     text:'I would use that money to expand my influence, investing in ways to promote myself and increase my visibility.' },
+      { archId:'espiritualista', text:'I would use that money to reduce my obligations and dedicate more time to my spiritual practices or my spiritual mission.' }
+    ]
+  }
+];
+
+const POINTS = [35, 30, 15, 10, 5, 5, 5];
+
+let page = 'welcome';
+let currentQ = 0;
+const rankings = [];
+for (let i = 0; i < QUESTIONS.length; i++) {
+  const shuffled = QUESTIONS[i].options.slice();
+  for (let j = shuffled.length - 1; j > 0; j--) {
+    const k = Math.floor(Math.random() * (j + 1));
+    [shuffled[j], shuffled[k]] = [shuffled[k], shuffled[j]];
+  }
+  rankings.push(shuffled.map(o => o.archId));
+}
+
+let dragIdx = null;
+
+function getArchetype(id) {
+  return ARCHETYPES.find(a => a.id === id);
+}
+
+function posClass(i) {
+  if (i === 0) return 'pos-1';
+  if (i === 1) return 'pos-2';
+  if (i === 2) return 'pos-3';
+  return 'pos-rest';
+}
+
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+function render() {
+  const app = document.getElementById('pqApp');
+  if (page === 'welcome') return renderWelcome(app);
+  if (page === 'quiz') return renderQuiz(app);
+  if (page === 'result') return renderResult(app);
+}
+
+function renderWelcome(app) {
+  app.innerHTML = `
+    <div class="pq-welcome">
+      <div class="pq-welcome-icon">&#10022;</div>
+      <h1>Personality Profile</h1>
+      <p>Discover which of the <strong>7 personalities</strong> best matches you, based on the chakra archetypes of Soul Game.</p>
+      <p>You will answer <strong>5 questions</strong>. In each one, rank the 7 options from the one that represents you most (top) to the one that represents you least (bottom).</p>
+      <p class="pq-note">There is no right or wrong answer. Follow your instinct and choose honestly.</p>
+      <button class="pq-btn-start" onclick="startQuiz()">Start</button>
+    </div>`;
+}
+
+function renderQuiz(app) {
+  const q = QUESTIONS[currentQ];
+  const rank = rankings[currentQ];
+  const pct = ((currentQ) / QUESTIONS.length * 100).toFixed(0);
+
+  let items = '';
+  rank.forEach((archId, i) => {
+    const opt = q.options.find(o => o.archId === archId);
+    const a = getArchetype(archId);
+    const pts = POINTS[i];
+    const ptsClass = i < 2 ? 'pts-high' : '';
+    items += `
+      <div class="pq-rank-item" draggable="true" data-idx="${i}"
+           ondragstart="onDragStart(event,${i})"
+           ondragover="onDragOver(event,${i})"
+           ondragleave="onDragLeave(event)"
+           ondrop="onDrop(event,${i})"
+           ontouchstart="onTouchStart(event,${i})"
+           ontouchmove="onTouchMove(event)"
+           ontouchend="onTouchEnd(event)">
+        <span class="pq-rank-pos ${posClass(i)}">${i + 1}</span>
+        <span class="pq-rank-text">${opt.text}</span>
+        <span class="pq-rank-pts ${ptsClass}">${pts}pts</span>
+        <span class="pq-rank-arrows">
+          <button class="pq-arrow-btn" onclick="moveItem(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="Move up">&#9650;</button>
+          <button class="pq-arrow-btn" onclick="moveItem(${i},1)" ${i === 6 ? 'disabled' : ''} aria-label="Move down">&#9660;</button>
+        </span>
+      </div>`;
+  });
+
+  const isLast = currentQ === QUESTIONS.length - 1;
+
+  app.innerHTML = `
+    <div class="pq-progress">
+      <div class="pq-progress-track"><div class="pq-progress-fill" style="width:${pct}%"></div></div>
+      <div class="pq-progress-label"><span>Question ${currentQ + 1} of ${QUESTIONS.length}</span><span>${pct}%</span></div>
+    </div>
+    <div class="pq-question-header">
+      <h2>${q.title}</h2>
+      <p class="pq-instruction">Drag or use the arrows to rank from what best matches you (top) to what matches you least (bottom).</p>
+    </div>
+    <div class="pq-ranking-list" id="rankingList">${items}</div>
+    <div class="pq-nav">
+      <button class="pq-btn-prev" onclick="prevQ()" ${currentQ === 0 ? 'disabled' : ''}>Previous</button>
+      ${isLast
+        ? '<button class="pq-btn-result" onclick="showResult()">View Results</button>'
+        : '<button class="pq-btn-next" onclick="nextQ()">Next</button>'}
+    </div>`;
+}
+
+function calcScores() {
+  const scores = {};
+  ARCHETYPES.forEach(a => { scores[a.id] = 0; });
+  rankings.forEach((rank) => {
+    rank.forEach((archId, pos) => {
+      scores[archId] += POINTS[pos];
+    });
+  });
+  const sorted = ARCHETYPES.map(a => ({ ...a, score: scores[a.id] }))
+    .sort((a, b) => b.score - a.score);
+  return sorted;
+}
+
+function renderResult(app) {
+  const sorted = calcScores();
+  const max = 175;
+
+  let cards = '';
+  sorted.forEach((a, i) => {
+    const rankNum = i + 1;
+    let cardClass = '';
+    let rankClass = 'rank-rest';
+    if (i === 0) { cardClass = 'top-1'; rankClass = 'rank-1'; }
+    else if (i === 1) { cardClass = 'top-2'; rankClass = 'rank-2'; }
+    else if (i === 2) { cardClass = 'top-3'; rankClass = 'rank-3'; }
+
+    const pct = ((a.score / max) * 100).toFixed(0);
+
+    cards += `
+      <div class="pq-result-card ${cardClass}">
+        <span class="pq-result-rank ${rankClass}">${rankNum}</span>
+        <div class="pq-result-info">
+          <p class="pq-result-name">${a.name}</p>
+          <span class="pq-result-chakra">Chakra ${a.chakra}</span>
+        </div>
+        <div class="pq-result-bar-wrap">
+          <div class="pq-result-bar-track"><div class="pq-result-bar-fill" style="width:${pct}%;background:${a.color}"></div></div>
+          <span class="pq-result-bar-label" style="color:${a.color}">${a.score} pts</span>
+        </div>
+      </div>`;
+  });
+
+  app.innerHTML = `
+    <div class="pq-result-header">
+      <div class="pq-result-icon">&#10022;</div>
+      <h2>Your Personality Profile</h2>
+      <p>Based on your answers, this is the order of the personalities that best match you.</p>
+    </div>
+    <div class="pq-result-list">${cards}</div>
+    <div class="pq-caveat">
+      <p><strong>Important:</strong> Everyone has all 7 personalities to varying degrees. This result is an initial indicator. According to the methodology, about 50% of people immediately identify with the result, while the other 50% may notice changes as they deepen their self-knowledge.</p>
+    </div>
+    <div class="pq-result-actions">
+      <button class="pq-btn-prev" onclick="backToQuiz()">Retake</button>
+      <button class="pq-btn-result" onclick="downloadPDF()">Download PDF</button>
+    </div>
+    ${window.jaCapturaHTML?window.jaCapturaHTML('quiz-personality-en'):''}
+    <p class="pq-disclaimer">Soul Game &mdash; Self-knowledge and personal transformation</p>`;
+}
+
+/* ---- Navigation ---- */
+window.startQuiz = function() {
+  page = 'quiz';
+  currentQ = 0;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.nextQ = function() {
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+window.showResult = function() {
+  page = 'result';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.backToQuiz = function() {
+  page = 'quiz';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+/* ---- Reorder via arrows ---- */
+window.moveItem = function(idx, dir) {
+  const rank = rankings[currentQ];
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= rank.length) return;
+  [rank[idx], rank[newIdx]] = [rank[newIdx], rank[idx]];
+  render();
+};
+
+/* ---- Drag & Drop (desktop) ---- */
+window.onDragStart = function(e, idx) {
+  dragIdx = idx;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+};
+
+window.onDragOver = function(e, idx) {
+  e.preventDefault();
+  const items = document.querySelectorAll('.pq-rank-item');
+  items.forEach(el => el.classList.remove('drag-over'));
+  if (idx !== dragIdx) {
+    items[idx].classList.add('drag-over');
+  }
+};
+
+window.onDragLeave = function(e) {
+  e.target.classList.remove('drag-over');
+};
+
+window.onDrop = function(e, dropIdx) {
+  e.preventDefault();
+  document.querySelectorAll('.pq-rank-item').forEach(el => {
+    el.classList.remove('drag-over', 'dragging');
+  });
+  if (dragIdx === null || dragIdx === dropIdx) return;
+  const rank = rankings[currentQ];
+  const item = rank.splice(dragIdx, 1)[0];
+  rank.splice(dropIdx, 0, item);
+  dragIdx = null;
+  render();
+};
+
+/* ---- Touch Drag (mobile) ---- */
+let touchStartIdx = null;
+let touchClone = null;
+let touchStartY = 0;
+
+window.onTouchStart = function(e, idx) {
+  touchStartIdx = idx;
+  touchStartY = e.touches[0].clientY;
+  const el = e.currentTarget;
+  touchClone = el.cloneNode(true);
+  touchClone.style.position = 'fixed';
+  touchClone.style.left = el.getBoundingClientRect().left + 'px';
+  touchClone.style.top = el.getBoundingClientRect().top + 'px';
+  touchClone.style.width = el.offsetWidth + 'px';
+  touchClone.style.zIndex = '9999';
+  touchClone.style.opacity = '0.85';
+  touchClone.style.pointerEvents = 'none';
+  touchClone.style.boxShadow = '0 8px 30px rgba(0,0,0,0.4)';
+  touchClone.style.transform = 'scale(1.03)';
+  document.body.appendChild(touchClone);
+  el.classList.add('dragging');
+};
+
+window.onTouchMove = function(e) {
+  if (touchClone) {
+    e.preventDefault();
+    const y = e.touches[0].clientY;
+    const dy = y - touchStartY;
+    touchClone.style.transform = `scale(1.03) translateY(${dy}px)`;
+
+    const items = document.querySelectorAll('.pq-rank-item');
+    items.forEach(el => el.classList.remove('drag-over'));
+    items.forEach((el, idx) => {
+      if (idx === touchStartIdx) return;
+      const rect = el.getBoundingClientRect();
+      if (y > rect.top && y < rect.bottom) {
+        el.classList.add('drag-over');
+      }
+    });
+  }
+};
+
+window.onTouchEnd = function(e) {
+  if (touchClone) {
+    document.body.removeChild(touchClone);
+    touchClone = null;
+  }
+  document.querySelectorAll('.pq-rank-item').forEach(el => {
+    el.classList.remove('dragging', 'drag-over');
+  });
+  if (touchStartIdx === null) return;
+  const y = e.changedTouches[0].clientY;
+  const items = document.querySelectorAll('.pq-rank-item');
+  let dropIdx = touchStartIdx;
+  items.forEach((el, idx) => {
+    const rect = el.getBoundingClientRect();
+    if (y > rect.top && y < rect.bottom) {
+      dropIdx = idx;
+    }
+  });
+  if (dropIdx !== touchStartIdx) {
+    const rank = rankings[currentQ];
+    const item = rank.splice(touchStartIdx, 1)[0];
+    rank.splice(dropIdx, 0, item);
+    render();
+  }
+  touchStartIdx = null;
+};
+
+/* ---- PDF Generation ---- */
+window.downloadPDF = function() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'mm', format:'a4' });
+  const pw = doc.internal.pageSize.getWidth();
+  const ph = doc.internal.pageSize.getHeight();
+  const mx = 18;
+  let y = 20;
+
+  function checkPage(need) {
+    if (y + need > ph - 20) {
+      doc.addPage();
+      y = 20;
+    }
+  }
+
+  // Header
+  doc.setFillColor(10, 10, 15);
+  doc.rect(0, 0, pw, ph, 'F');
+  doc.setTextColor(240, 239, 244);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text('Personality Profile', pw / 2, y, { align: 'center' });
+  y += 7;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(186, 181, 200);
+  doc.text('Soul Game - Personality Questionnaire', pw / 2, y, { align: 'center' });
+  y += 5;
+  const today = new Date();
+  doc.setFontSize(8);
+  doc.text('Date: ' + today.toLocaleDateString('en-US'), pw / 2, y, { align: 'center' });
+  y += 12;
+
+  // Line
+  doc.setDrawColor(60, 60, 80);
+  doc.line(mx, y, pw - mx, y);
+  y += 8;
+
+  // Section 1: Answers per question
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.setTextColor(240, 239, 244);
+  doc.text('YOUR ANSWERS', mx, y);
+  y += 8;
+
+  QUESTIONS.forEach((q, qi) => {
+    checkPage(60);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(167, 139, 250);
+    doc.text('Question ' + (qi + 1) + ': ' + q.title.substring(0, 80), mx, y);
+    y += 6;
+
+    const rank = rankings[qi];
+    rank.forEach((archId, pos) => {
+      checkPage(8);
+      const opt = q.options.find(o => o.archId === archId);
+      const pts = POINTS[pos];
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+
+      if (pos < 2) {
+        doc.setTextColor(245, 158, 11);
+      } else {
+        doc.setTextColor(186, 181, 200);
+      }
+
+      const posLabel = ordinal(pos + 1) + ' (' + pts + 'pts)';
+      doc.text(posLabel, mx, y);
+
+      doc.setTextColor(220, 218, 230);
+      const lines = doc.splitTextToSize(opt.text, pw - mx * 2 - 30);
+      doc.text(lines, mx + 28, y);
+      y += lines.length * 4 + 2;
+    });
+    y += 4;
+  });
+
+  // Section 2: Results
+  checkPage(40);
+  doc.setDrawColor(60, 60, 80);
+  doc.line(mx, y, pw - mx, y);
+  y += 8;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.setTextColor(240, 239, 244);
+  doc.text('FINAL RESULT', mx, y);
+  y += 8;
+
+  const sorted = calcScores();
+  const maxPts = 175;
+
+  sorted.forEach((a, i) => {
+    checkPage(12);
+    const rankNum = i + 1;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+
+    if (i === 0) doc.setTextColor(245, 158, 11);
+    else if (i === 1) doc.setTextColor(139, 92, 246);
+    else if (i === 2) doc.setTextColor(236, 72, 153);
+    else doc.setTextColor(186, 181, 200);
+
+    doc.text(ordinal(rankNum) + '  ' + a.name, mx, y);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.text('Chakra ' + a.chakra + '  -  ' + a.score + ' pts (' + ((a.score / maxPts) * 100).toFixed(0) + '%)', mx + 2, y + 4);
+
+    // Bar
+    const barX = pw - mx - 50;
+    const barW = 48;
+    const barH = 4;
+    doc.setFillColor(37, 37, 53);
+    doc.roundedRect(barX, y - 2.5, barW, barH, 1.5, 1.5, 'F');
+
+    const fillW = (a.score / maxPts) * barW;
+    const rgb = hexToRgb(a.color);
+    doc.setFillColor(rgb.r, rgb.g, rgb.b);
+    doc.roundedRect(barX, y - 2.5, fillW, barH, 1.5, 1.5, 'F');
+
+    y += 12;
+  });
+
+  // Caveat
+  checkPage(20);
+  y += 4;
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(7);
+  doc.setTextColor(122, 118, 144);
+  const caveat = 'Important: Everyone has all 7 personalities to varying degrees. This result is an initial indicator. According to the methodology, about 50% of people immediately identify with the result, while the other 50% may notice changes as they deepen their self-knowledge.';
+  const cavLines = doc.splitTextToSize(caveat, pw - mx * 2);
+  doc.text(cavLines, mx, y);
+  y += cavLines.length * 3 + 6;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.text('Soul Game - Self-knowledge and personal transformation', pw / 2, y, { align: 'center' });
+
+  doc.save('personality-profile-' + today.toISOString().slice(0, 10) + '.pdf');
+};
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
+
+/* ---- Nav toggle ---- */
+document.getElementById('navToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+render();
+})();
+</script>
+<script>
+(function(){
+var JA_WEBHOOK='[URL_WEBHOOK_N8N]';
+var JA_DESTINO='leitura-en.html';
+window.jaCapturaHTML=function(origem){
+ if(localStorage.getItem('ja_lead')) return '<div style="margin-top:28px;text-align:center"><a href="'+JA_DESTINO+'" style="display:inline-block;background:linear-gradient(135deg,#8B5CF6,#A855F7);color:#fff;padding:14px 28px;border-radius:12px;font-weight:700;text-decoration:none">Discover the live Reading</a></div>';
+ return '<div id="ja-captura" style="margin-top:32px;padding:26px;border-radius:14px;background:linear-gradient(160deg,#151C2C,#1A1330);border:1px solid #8B5CF6">'
+ +'<h3 style="color:#fff;margin:0 0 6px;font-size:1.15rem">Want your full map by email?</h3>'
+ +'<p style="color:#9CA3AF;margin:0 0 14px;font-size:.93rem">We will send this result with a practical reading of what it means and the next step for your most critical point.</p>'
+ +'<form onsubmit="return jaEnviarCaptura(event,\''+(origem||'quiz')+'\')" style="display:flex;gap:10px;flex-wrap:wrap">'
+ +'<input type="text" id="ja-nome" placeholder="Your name" required style="flex:1;min-width:120px;padding:12px;border-radius:10px;border:1px solid #232B3E;background:#0B0F1A;color:#E5E7EB;font-size:16px">'
+ +'<input type="email" id="ja-email" placeholder="Your best email" required style="flex:2;min-width:180px;padding:12px;border-radius:10px;border:1px solid #232B3E;background:#0B0F1A;color:#E5E7EB;font-size:16px">'
+ +'<button type="submit" style="padding:12px 24px;border-radius:10px;border:none;cursor:pointer;background:linear-gradient(135deg,#8B5CF6,#A855F7);color:#fff;font-weight:700">Send me my map</button>'
+ +'</form><p id="ja-ok" style="display:none;color:#22C55E;margin-top:10px">Sent! Check your inbox. Taking you to the next step...</p></div>';
+};
+window.jaEnviarCaptura=function(e,origem){
+ e.preventDefault();
+ var payload={nome:document.getElementById('ja-nome').value,email:document.getElementById('ja-email').value,origem:origem+':'+location.pathname,resultado:window.__jaResultado||null,ts:new Date().toISOString()};
+ try{localStorage.setItem('ja_lead',payload.email);}catch(err){}
+ if(JA_WEBHOOK.indexOf('http')===0){try{fetch(JA_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}catch(err){}}
+ var okEl=document.getElementById('ja-ok');if(okEl)okEl.style.display='block';
+ setTimeout(function(){window.location.href=JA_DESTINO;},1600);
+ return false;
+};
+})();
+</script>
+</body>
+</html>
