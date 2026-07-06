@@ -994,7 +994,7 @@ class JogoDaAlmaGerador {
                 return;
             }
             try { localStorage.setItem('sg_lead', email); } catch (e) {}
-            var SG_WEBHOOK = '[URL_WEBHOOK_N8N]';
+            var SG_WEBHOOK = 'https://projeto1-n8n.dpmo2b.easypanel.host/webhook/jogo-da-alma-leads';
             if (SG_WEBHOOK.indexOf('http') === 0) {
                 try { fetch(SG_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nome: name, email: email, origem: 'soul-game-analysis', ts: new Date().toISOString() }) }); } catch (e) {}
             }
